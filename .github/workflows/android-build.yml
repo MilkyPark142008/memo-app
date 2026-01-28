@@ -30,14 +30,10 @@ jobs:
           build-tools: 34.0.0
 
       # 4. 【关键改变】这里不再依赖 ./gradlew，而是直接用 gradle 命令！
-      - name: 授予 Gradle 执行权限并构建APK
-        run: |
-          # 配置Gradle使用更快的构建缓存
-          chmod +x gradlew 2>/dev/null || echo “本地gradlew不存在，将使用系统Gradle”
-          # 使用Gradle命令进行构建
-          gradle wrapper --gradle-version 8.5 # 先尝试生成wrapper（可选）
-          gradle assembleDebug || ./gradlew assembleDebug # 双重尝试，确保成功
-
+      - name: 授予 Gradle 执行权限并构建 APK
+  run: |
+    # 尝试使用系统Gradle构建，并忽略所有警告
+    gradle assembleDebug --warning-mode none || ./gradlew assembleDebug --warning-mode none
       # 5. 上传构建好的APK文件
       - name: 上传 APK 文件
         uses: actions/upload-artifact@v4
