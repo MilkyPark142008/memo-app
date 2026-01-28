@@ -11,23 +11,22 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Setup Android
         uses: android-actions/setup-android@v3
 
-      # 【核心】跳过所有wrapper，直接用系统gradle命令
       - name: Build APK
         run: |
-          # 删除可能残留的损坏wrapper文件，确保干净
-          rm -f gradlew
-          rm -rf gradle/wrapper
-          # 使用系统Gradle，并指定降级的、兼容的插件版本
-          gradle init --type basic --dsl kotlin --project-name MemoApp
-          gradle wrapper --gradle-version 7.5.1 --distribution-type bin
+          rm -f gradlew 2>/dev/null || true
+          rm -rf gradle/wrapper 2>/dev/null || true
+          gradle wrapper --gradle-version 7.5.1
+          chmod +x ./gradlew
           ./gradlew assembleDebug
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: MemoApp-APK
