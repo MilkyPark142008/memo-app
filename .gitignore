@@ -1,0 +1,21 @@
+# Android
+*.apk
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+
+# Gradle
+.gradle/
+build/
+
+# Local
+local.properties
+
+# Other
+*.iml
+.idea/
+.DS_Store
+*.log
